@@ -9,7 +9,7 @@
   --bg:#ECEFEC; --surface:#FBFCFA; --ink:#1C2321; --muted:#56635E; --line:#CFD7D3;
   --ocean:#BFD6DD; --ocean-grid:#A9C5CE; --land:#E6DAC0; --land-edge:#9C8D6A; --land-hover:#DCCBA4; --ghost:#3E6C7A;
   --accent:#2C6B5E; --accent-ink:#FFFFFF; --country-sel:rgba(44,107,94,.28); --scroll-track:#E3E8E5; --scroll-thumb:#9FB0A9;
-  --g-dino:#B8461B; --g-reptil:#4F7A28; --g-marino:#1C64A0; --g-mamifero:#7B4A9E; --g-ave:#A77A00; --g-humano:#9B2F55; --g-anfibio:#0E8378;
+  --g-dino:#B8461B; --g-reptil:#4F7A28; --g-marino:#1C64A0; --g-mamifero:#7B4A9E; --g-ave:#A77A00; --g-humano:#9B2F55; --g-anfibio:#0E8378; --g-pez:#4B55B8; --g-invertebrado:#8A5A2B; --g-planta:#6E7F00; --g-otro:#6B7280; --land-barren:#D8D2C8;
   --f-display:"Zilla Slab", "Rockwell", "Roboto Slab", Georgia, serif;
   --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
   --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -18,13 +18,13 @@
   --bg:#111615; --surface:#182020; --ink:#E5EBE8; --muted:#9AA8A3; --line:#2A3533;
   --ocean:#14303A; --ocean-grid:#1D3E4A; --land:#5A523E; --land-edge:#91845F; --land-hover:#6E6449; --ghost:#8FC3D2;
   --accent:#6FC1AE; --accent-ink:#0E1A17; --country-sel:rgba(111,193,174,.30); --scroll-track:#1F2928; --scroll-thumb:#4A5A56;
-  --g-dino:#F0844F; --g-reptil:#9BCB5E; --g-marino:#62AEEA; --g-mamifero:#C29BE6; --g-ave:#F0C64A; --g-humano:#EE7FA6; --g-anfibio:#5FD0C2;
+  --g-dino:#F0844F; --g-reptil:#9BCB5E; --g-marino:#62AEEA; --g-mamifero:#C29BE6; --g-ave:#F0C64A; --g-humano:#EE7FA6; --g-anfibio:#5FD0C2; --g-pez:#9AA2F5; --g-invertebrado:#D6A574; --g-planta:#C7D84A; --g-otro:#B0B7C3; --land-barren:#4C4943;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111615; --surface:#182020; --ink:#E5EBE8; --muted:#9AA8A3; --line:#2A3533;
   --ocean:#14303A; --ocean-grid:#1D3E4A; --land:#5A523E; --land-edge:#91845F; --land-hover:#6E6449; --ghost:#8FC3D2;
   --accent:#6FC1AE; --accent-ink:#0E1A17; --country-sel:rgba(111,193,174,.30); --scroll-track:#1F2928; --scroll-thumb:#4A5A56;
-  --g-dino:#F0844F; --g-reptil:#9BCB5E; --g-marino:#62AEEA; --g-mamifero:#C29BE6; --g-ave:#F0C64A; --g-humano:#EE7FA6; --g-anfibio:#5FD0C2;
+  --g-dino:#F0844F; --g-reptil:#9BCB5E; --g-marino:#62AEEA; --g-mamifero:#C29BE6; --g-ave:#F0C64A; --g-humano:#EE7FA6; --g-anfibio:#5FD0C2; --g-pez:#9AA2F5; --g-invertebrado:#D6A574; --g-planta:#C7D84A; --g-otro:#B0B7C3; --land-barren:#4C4943;
   color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -39,7 +39,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.3re
 /* Columna estratigráfica */
 .strata{grid-area:strata;display:flex;flex-direction:column;gap:0;align-self:start;border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .era{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);background:var(--surface);padding:6px 10px;border-bottom:1px solid var(--line)}
-.layer{all:unset;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:10px 12px;min-height:64px;
+.layer{all:unset;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:8px 12px;min-height:54px;
   background:var(--pc);color:var(--pt);position:relative;border-bottom:1px solid rgba(0,0,0,.18);transition:filter .15s}
 .layer:last-child{border-bottom:0}
 .layer .pn{font-family:var(--f-display);font-weight:700;font-size:1.05rem;line-height:1.1}
@@ -65,6 +65,7 @@ svg#map.dragging{cursor:grabbing}
 .grat{fill:none;stroke:var(--ocean-grid);stroke-width:.6}
 .plate{fill:var(--land);stroke:var(--land-edge);stroke-width:.7;cursor:pointer;transition:fill .15s}
 .plate:hover,.plate.hl{fill:var(--land-hover)}
+svg.barren .plate{fill:var(--land-barren)}
 .plate:focus{outline:none}
 .plate:focus-visible{stroke:var(--accent);stroke-width:2}
 .plate.sel{fill:var(--land-hover);stroke:var(--ink);stroke-width:1.4}
@@ -205,7 +206,7 @@ body.sheet-open{padding-bottom:62vh}
       <div class="legend" id="legend"></div>
       <div class="toggles"><label class="toggle"><input type="checkbox" id="countryToggle" checked> Mostrar países</label><label class="toggle"><input type="checkbox" id="ghostToggle"> Mostrar continentes actuales</label></div>
     </div>
-    <p class="note">Las posiciones de los continentes son una aproximación hecha a mano a partir de reconstrucciones paleogeográficas: sirven para tener una idea, no para medir. Los puntos marcan dónde se hallaron los fósiles. Arrastrá para girar el globo; con la rueda del mouse o los botones lo acercás.</p>
+    <p class="note">Las tierras grises del Ediacárico al Ordovícico todavía no tenían plantas. Las posiciones de los continentes son una aproximación hecha a mano a partir de reconstrucciones paleogeográficas, y antes del Pérmico son todavía más inciertas: sirven para tener una idea, no para medir. Los puntos marcan dónde se hallaron los fósiles. Arrastrá para girar el globo; con la rueda del mouse o los botones lo acercás.</p>
   </section>
 
   <aside class="panel" id="panel" aria-live="polite"></aside>
@@ -250,16 +251,44 @@ const PERIODS = [
  {k:"triasico",n:"Triásico",era:"Mesozoico",ma:"252 – 201 Ma",age:"Hace ~220 millones de años",super:"Pangea",pc:"#812B92",pt:"#FFFFFF",
   d:"Todos los continentes forman un único supercontinente, Pangea, rodeado por el océano Pantalasa. El interior es cálido y muy seco. Aparecen los primeros dinosaurios, los primeros mamíferos y los pterosaurios.",
   pos:{NA:[-40,30,32],SA:[-22,-28,-32],AF:[12,-10,14],EU:[55,48,22],IN:[44,-42,55],AU:[88,-56,38],MG:[36,-27,24],AN:[28,-70,0]}},
+ {k:"permico",n:"Pérmico",era:"Paleozoico",ma:"299 – 252 Ma",age:"Hace ~270 millones de años",super:"Se forma Pangea",pc:"#F04028",pt:"#FFFFFF",
+  d:"Los continentes terminan de unirse en Pangea. El interior se vuelve muy seco y dominan los sinápsidos, parientes lejanos de los mamíferos. Termina con la mayor extinción de la historia, en la que desapareció cerca del 90 % de las especies marinas.",
+  lm:{"G":[["mor",-20,0],["safr",22,-58]],"NA":[["nyc",-25,12],["alaska",-70,44]],"EU":[["norw",0,26],["sib",52,56]]}},
+ {k:"carbonifero",n:"Carbonífero",era:"Paleozoico",ma:"359 – 299 Ma",age:"Hace ~320 millones de años",super:"Bosques de carbón",pc:"#67A599",pt:"#0C2622",
+  d:"Enormes bosques pantanosos de helechos gigantes y licopodios cubren los trópicos; sus restos forman hoy el carbón. Con tanto oxígeno en el aire, insectos y otros artrópodos alcanzan tamaños gigantes. Aparecen los primeros reptiles y el huevo con cáscara.",
+  lm:{"G":[["mor",-16,-10],["safr",18,-70]],"NA":[["nyc",-22,4],["alaska",-75,32]],"EU":[["norw",8,16],["sib",68,44]]}},
+ {k:"devonico",n:"Devónico",era:"Paleozoico",ma:"419 – 359 Ma",age:"Hace ~400 millones de años",super:"La edad de los peces",pc:"#CB8C37",pt:"#2A1800",
+  d:"Los mares se llenan de peces, desde tiburones primitivos hasta placodermos acorazados. Aparecen los primeros árboles y bosques, y algunos peces con aletas carnosas dan origen a los primeros tetrápodos, los animales de cuatro patas.",
+  lm:{"G":[["mor",-22,-32],["safr",-5,-85]],"NA":[["nyc",-32,-12],["alaska",-88,12]],"EU":[["norw",-4,12],["sib",64,36]]}},
+ {k:"silurico",n:"Silúrico",era:"Paleozoico",ma:"444 – 419 Ma",age:"Hace ~430 millones de años",super:"La vida sale del agua",pc:"#B3E1B6",pt:"#0E2A12",
+  d:"El clima se templa después de una glaciación. Aparecen las primeras plantas con vasos en tierra firme y los primeros animales terrestres, como los milpiés. En el mar dominan los arrecifes de coral y los escorpiones marinos.",
+  lm:{"G":[["mor",-20,-45],["safr",30,-80]],"NA":[["nyc",-45,-18],["alaska",-98,6]],"EU":[["norw",6,2],["sib",78,28]]}},
+ {k:"ordovicico",n:"Ordovícico",era:"Paleozoico",ma:"485 – 444 Ma",age:"Hace ~460 millones de años",super:"Gondwana en el polo sur",pc:"#009270",pt:"#FFFFFF",
+  d:"Los mares cubren gran parte de los continentes y la vida marina se diversifica muchísimo: trilobites, nautiloides gigantes y los primeros peces sin mandíbula. Termina con una glaciación y la segunda mayor extinción masiva.",
+  lm:{"G":[["mor",0,-75],["safr",80,-35]],"NA":[["nyc",-95,-18],["alaska",-55,18]],"EU":[["norw",-140,-35],["sib",-162,6]]}},
+ {k:"cambrico",n:"Cámbrico",era:"Paleozoico",ma:"539 – 485 Ma",age:"Hace ~510 millones de años",super:"La explosión cámbrica",pc:"#7FA056",pt:"#13210A",
+  d:"En pocos millones de años aparecen casi todos los grandes grupos de animales actuales, muchos con ojos, patas y caparazones. La tierra firme es un desierto sin plantas: toda la vida está en el mar.",
+  lm:{"G":[["mor",-30,-50],["safr",30,-62]],"NA":[["nyc",-100,-18],["alaska",-62,14]],"EU":[["norw",-150,-50],["sib",-172,-10]]}},
+ {k:"ediacarico",n:"Ediacárico",era:"Neoproterozoico",ma:"635 – 539 Ma",age:"Hace ~560 millones de años",super:"Los primeros animales",pc:"#FED96A",pt:"#2B2100",
+  d:"Aparecen los primeros organismos grandes y complejos, de cuerpo blando y con formas que no se parecen a nada actual: discos, frondas y bolsas acolchadas. Muchos científicos creen que algunos fueron los primeros animales.",
+  lm:{"G":[["mor",-15,-30],["safr",45,-45]],"NA":[["nyc",-62,-52],["alaska",-22,-28]],"EU":[["norw",-128,-55],["sib",-168,-20]]}},
 ];
 const SUPER = {
   triasico:()=>"Pangea",
   jurasico:k=>(k==="NA"||k==="EU")?"Laurasia":"Gondwana",
   cretacico:k=>(k==="NA"||k==="EU")?"Laurasia":"Gondwana",
+  permico:()=>"Pangea",
+  carbonifero:k=>(k==="NA"||k==="EU")?"Euramérica":"Gondwana",
+  devonico:k=>(k==="NA"||k==="EU")?"Euramérica":"Gondwana",
+  silurico:k=>k==="NA"?"Laurentia":k==="EU"?"Báltica y Siberia":"Gondwana",
+  ordovicico:k=>k==="NA"?"Laurentia":k==="EU"?"Báltica y Siberia":"Gondwana",
+  cambrico:k=>k==="NA"?"Laurentia":k==="EU"?"Báltica y Siberia":"Gondwana",
+  ediacarico:k=>k==="NA"?"Laurentia":k==="EU"?"Báltica y Siberia":"Gondwana en formación",
 };
 
 const GROUPS = {
   dino:{n:"Dinosaurio",c:"--g-dino"}, reptil:{n:"Otro reptil",c:"--g-reptil"}, marino:{n:"Animal marino",c:"--g-marino"},
-  mamifero:{n:"Mamífero",c:"--g-mamifero"}, ave:{n:"Ave",c:"--g-ave"}, anfibio:{n:"Anfibio",c:"--g-anfibio"}, humano:{n:"Homínido",c:"--g-humano"}
+  mamifero:{n:"Mamífero o pariente",c:"--g-mamifero"}, ave:{n:"Ave",c:"--g-ave"}, anfibio:{n:"Anfibio",c:"--g-anfibio"}, pez:{n:"Pez",c:"--g-pez"}, invertebrado:{n:"Invertebrado",c:"--g-invertebrado"}, planta:{n:"Planta",c:"--g-planta"}, otro:{n:"Otro organismo",c:"--g-otro"}, humano:{n:"Homínido",c:"--g-humano"}
 };
 
 /* Especies: p=período, pl=placa, ll=[lon,lat] del yacimiento (posición actual), w=artículo de Wikipedia */
@@ -525,6 +554,124 @@ const SPECIES = [
   d:"Un ave marina que no volaba, parecida a un pingüino. De hecho, la palabra «pingüino» se usó primero para ella. Las dos últimas fueron cazadas en una isla de Islandia en 1844."},
  {id:"quagga",n:"Cuaga",s:"Equus quagga quagga",p:"cuaternario",pl:"AF",ll:[24.0,-31.0],g:"mamifero",when:"extinto en 1883",where:"Karoo (Sudáfrica)",diet:"Herbívoro",size:"~2,5 m",w:"Quagga",
   d:"Una subespecie de cebra con rayas solo en la cabeza y el cuello. Fue el primer animal extinto al que se le estudió el ADN, en 1984."},
+ // ---- Paleozoico y Ediacárico ----
+ // Pérmico
+ {id:"dimetrodon",n:"Dimetrodon",s:"Dimetrodon",p:"permico",pl:"NA",ll:[-99.2,33.6],g:"mamifero",when:"hace ~295 – 272 Ma",where:"Texas (EE. UU.)",diet:"Carnívoro",size:"~3 – 4,5 m",w:"Dimetrodon",
+  d:"Muchos lo confunden con un dinosaurio, pero vivió 40 millones de años antes y estaba más emparentado con los mamíferos. La vela de su lomo quizás lo ayudaba a regular la temperatura o a lucirse."},
+ {id:"diplocaulus",n:"Diplocaulus",s:"Diplocaulus",p:"permico",pl:"NA",ll:[-98.8,34.0],g:"anfibio",when:"hace ~306 – 255 Ma",where:"Texas y Oklahoma (EE. UU.)",diet:"Carnívoro",size:"~1 m",w:"Diplocaulus",
+  d:"Un anfibio con una cabeza en forma de bumerán. Esa forma quizás lo ayudaba a deslizarse en el agua o hacía difícil que un depredador se lo tragara."},
+ {id:"helicoprion",n:"Helicoprion",s:"Helicoprion",p:"permico",pl:"NA",ll:[-111.5,42.6],g:"pez",when:"hace ~290 – 270 Ma",where:"Idaho (EE. UU.); también Rusia y Australia",diet:"Carnívoro (calamares)",size:"~5 – 8 m",w:"Helicoprion",
+  d:"Un pariente de las quimeras con una espiral de dientes en la mandíbula inferior, como una sierra circular. Durante un siglo nadie supo dónde iba esa espiral, hasta que una tomografía lo resolvió en 2013."},
+ {id:"mesosaurus",n:"Mesosaurus",s:"Mesosaurus tenuidens",p:"permico",pl:"SA",ll:[-50.0,-25.5],g:"reptil",when:"hace ~299 – 294 Ma",where:"Paraná (Brasil), Uruguay y Sudáfrica",diet:"Carnívoro (crustáceos)",size:"~1 m",w:"Mesosaurus",
+  d:"Un reptil acuático de agua dulce que aparece en Sudamérica y en el sur de África. Alfred Wegener lo usó como prueba de que esos continentes habían estado unidos."},
+ {id:"glossopteris",n:"Glossopteris",s:"Glossopteris",p:"permico",pl:"AN",ll:[170.0,-85.0],g:"planta",when:"hace ~299 – 252 Ma",where:"Glaciar Beardmore (Antártida); todo Gondwana",diet:"—",size:"árbol de hasta ~8 m",w:"Glossopteris",
+  d:"Un árbol con hojas en forma de lengua que cubría todo Gondwana. La expedición de Scott llevaba fósiles suyos cuando murió en la Antártida, en 1912: eran prueba de que allí hubo bosques."},
+ {id:"inostrancevia",n:"Inostrancevia",s:"Inostrancevia alexandri",p:"permico",pl:"EU",ll:[44.0,62.5],g:"mamifero",when:"hace ~260 – 254 Ma",where:"Río Dviná Septentrional (Rusia)",diet:"Carnívoro",size:"~3,5 m",w:"Inostrancevia",
+  d:"Un gorgonopsio, sinápsido depredador con colmillos de sable de más de 12 cm. Fue uno de los mayores carnívoros de su tiempo."},
+ {id:"scutosaurus",n:"Scutosaurus",s:"Scutosaurus karpinskii",p:"permico",pl:"EU",ll:[45.0,61.0],g:"reptil",when:"hace ~265 – 254 Ma",where:"Rusia europea",diet:"Herbívoro",size:"~2,5 – 3 m",w:"Scutosaurus",
+  d:"Un pareiasaurio, reptil herbívoro pesado y acorazado con placas óseas en la piel y bultos en la cara. Era una de las presas del Inostrancevia."},
+ {id:"moschops",n:"Moschops",s:"Moschops capensis",p:"permico",pl:"AF",ll:[22.0,-32.5],g:"mamifero",when:"hace ~265 – 260 Ma",where:"Karoo (Sudáfrica)",diet:"Herbívoro",size:"~2,5 m",w:"Moschops",
+  d:"Un sinápsido robusto con un cráneo muy grueso, que quizás usaba para chocar cabezas con otros machos. Comía plantas duras con dientes en forma de cincel."},
+ {id:"coelurosauravus",n:"Coelurosauravus",s:"Coelurosauravus jaekeli",p:"permico",pl:"MG",ll:[45.0,-22.5],g:"reptil",when:"hace ~255 Ma",where:"Madagascar; también Alemania",diet:"Insectívoro",size:"~40 cm",w:"Coelurosauravus",
+  d:"El primer vertebrado planeador conocido. Tenía unas alas de piel sostenidas por varillas óseas que salían del cuerpo, y saltaba de árbol en árbol."},
+ // Carbonífero
+ {id:"meganeura",n:"Meganeura",s:"Meganeura monyi",p:"carbonifero",pl:"EU",ll:[2.75,46.3],g:"invertebrado",when:"hace ~300 Ma",where:"Commentry (Francia)",diet:"Carnívoro (insectos)",size:"~70 cm de envergadura",w:"Meganeura",
+  d:"Un insecto parecido a una libélula gigante, uno de los más grandes de la historia. Pudo crecer tanto en parte porque el aire tenía más oxígeno que hoy."},
+ {id:"arthropleura",n:"Arthropleura",s:"Arthropleura",p:"carbonifero",pl:"EU",ll:[-1.7,55.3],g:"invertebrado",when:"hace ~345 – 290 Ma",where:"Northumberland (Inglaterra) y Norteamérica",diet:"Herbívoro",size:"hasta ~2,6 m",w:"Arthropleura",
+  d:"Un milpiés gigante, el invertebrado terrestre más grande que existió. Recorría el suelo de los bosques pantanosos comiendo plantas."},
+ {id:"pulmonoscorpius",n:"Pulmonoscorpius",s:"Pulmonoscorpius kirktonensis",p:"carbonifero",pl:"EU",ll:[-3.6,55.9],g:"invertebrado",when:"hace ~335 Ma",where:"East Kirkton (Escocia)",diet:"Carnívoro",size:"~70 cm",w:"Pulmonoscorpius",
+  d:"Un escorpión terrestre gigante, del largo de un brazo. Probablemente cazaba insectos y pequeños vertebrados."},
+ {id:"lepidodendron",n:"Lepidodendron",s:"Lepidodendron",p:"carbonifero",pl:"EU",ll:[7.2,51.5],g:"planta",when:"hace ~359 – 299 Ma",where:"Cuenca del Ruhr (Alemania) y todo el hemisferio norte",diet:"—",size:"árbol de hasta ~40 m",w:"Lepidodendron",
+  d:"Un «árbol escama», pariente gigante de los licopodios actuales, que miden unos centímetros. Su corteza tenía un dibujo de rombos, y sus troncos formaron buena parte del carbón."},
+ {id:"hylonomus",n:"Hylonomus",s:"Hylonomus lyelli",p:"carbonifero",pl:"NA",ll:[-64.43,45.7],g:"reptil",when:"hace ~312 Ma",where:"Acantilados de Joggins, Nueva Escocia (Canadá)",diet:"Insectívoro",size:"~20 – 25 cm",w:"Hylonomus",
+  d:"Uno de los reptiles más antiguos que se conocen. Sus restos aparecieron dentro de troncos huecos de árboles fosilizados, donde quizás quedó atrapado."},
+ {id:"tullimonstrum",n:"Monstruo de Tully",s:"Tullimonstrum gregarium",p:"carbonifero",pl:"NA",ll:[-88.2,41.25],g:"otro",when:"hace ~307 Ma",where:"Mazon Creek, Illinois (EE. UU.)",diet:"Carnívoro",size:"~35 cm",w:"Tullimonstrum",
+  d:"Un animal marino rarísimo, con los ojos en una barra transversal y una trompa con pinzas. Todavía se discute qué era: ¿un vertebrado, un molusco o algo distinto?"},
+ {id:"stethacanthus",n:"Stethacanthus",s:"Stethacanthus",p:"carbonifero",pl:"NA",ll:[-109.0,46.9],g:"pez",when:"hace ~360 – 320 Ma",where:"Bear Gulch, Montana (EE. UU.); también Escocia",diet:"Carnívoro",size:"~70 cm – 2 m",w:"Stethacanthus",
+  d:"Un pariente de los tiburones con una aleta dorsal con forma de tabla de planchar, cubierta de dientecitos. Quizás la usaba para lucirse o asustar a otros."},
+ // Devónico
+ {id:"dunkleosteus",n:"Dunkleosteus",s:"Dunkleosteus terrelli",p:"devonico",pl:"NA",ll:[-81.7,41.5],g:"pez",when:"hace ~382 – 358 Ma",where:"Cleveland, Ohio (EE. UU.)",diet:"Carnívoro",size:"~3,5 – 4 m",w:"Dunkleosteus",
+  d:"Un placodermo con la cabeza cubierta por una armadura de hueso. No tenía dientes, sino placas filosas que se afilaban solas al cerrar la boca. Fue uno de los primeros superdepredadores."},
+ {id:"tiktaalik",n:"Tiktaalik",s:"Tiktaalik roseae",p:"devonico",pl:"NA",ll:[-84.0,78.5],g:"pez",when:"hace ~375 Ma",where:"Isla de Ellesmere (Canadá)",diet:"Carnívoro",size:"~1,2 – 2,7 m",w:"Tiktaalik",
+  d:"Un «pez con patas»: tenía escamas y branquias, pero también cuello, pulmones y aletas con huesos parecidos a los de un brazo. Es una pieza clave del paso del agua a la tierra."},
+ {id:"acanthostega",n:"Acanthostega",s:"Acanthostega gunnari",p:"devonico",pl:"NA",ll:[-23.0,72.5],g:"anfibio",when:"hace ~365 Ma",where:"Este de Groenlandia",diet:"Carnívoro",size:"~60 cm",w:"Acanthostega",
+  d:"Uno de los primeros tetrápodos. Tenía patas con ocho dedos, pero todavía vivía en el agua: las patas aparecieron antes de que los animales caminaran en tierra."},
+ {id:"ichthyostega",n:"Ichthyostega",s:"Ichthyostega",p:"devonico",pl:"NA",ll:[-24.0,72.2],g:"anfibio",when:"hace ~365 Ma",where:"Este de Groenlandia",diet:"Carnívoro",size:"~1,5 m",w:"Ichthyostega",
+  d:"Un tetrápodo primitivo con patas fuertes y cola de pez. Quizás se arrastraba por la orilla como una foca, usando las patas delanteras."},
+ {id:"eospermatopteris",n:"Bosque de Gilboa",s:"Eospermatopteris",p:"devonico",pl:"NA",ll:[-74.45,42.4],g:"planta",when:"hace ~385 Ma",where:"Gilboa, Nueva York (EE. UU.)",diet:"—",size:"árbol de ~8 m",w:"Eospermatopteris",
+  d:"Uno de los bosques fósiles más antiguos del mundo. Sus árboles parecían palmeras, pero no tenían hojas: tenían ramitas que hacían la fotosíntesis."},
+ {id:"jaekelopterus",n:"Jaekelopterus",s:"Jaekelopterus rhenaniae",p:"devonico",pl:"EU",ll:[6.6,50.3],g:"invertebrado",when:"hace ~390 Ma",where:"Renania (Alemania)",diet:"Carnívoro",size:"~2,5 m",w:"Jaekelopterus",
+  d:"Un escorpión marino, el artrópodo más grande que se conoce. Se lo calculó a partir de una pinza fósil de 46 cm."},
+ {id:"rhynia",n:"Rhynia",s:"Rhynia gwynne-vaughanii",p:"devonico",pl:"EU",ll:[-2.85,57.33],g:"planta",when:"hace ~407 Ma",where:"Rhynie (Escocia)",diet:"—",size:"~20 cm",w:"Rhynia",
+  d:"Una de las primeras plantas terrestres: tallos sin hojas ni raíces verdaderas. En Rhynie se conservó un ecosistema completo con detalle microscópico, gracias a aguas termales ricas en sílice."},
+ {id:"walliserops",n:"Walliserops",s:"Walliserops trifurcatus",p:"devonico",pl:"AF",ll:[-4.5,30.5],g:"invertebrado",when:"hace ~400 Ma",where:"Anti-Atlas (Marruecos)",diet:"Detritívoro",size:"~7 cm",w:"Walliserops",
+  d:"Un trilobite con un tridente en la cabeza. Quizás los machos lo usaban para pelear entre ellos, como los escarabajos con cuernos."},
+ {id:"materpiscis",n:"Materpiscis",s:"Materpiscis attenboroughi",p:"devonico",pl:"AU",ll:[125.7,-18.4],g:"pez",when:"hace ~380 Ma",where:"Formación Gogo (Australia Occidental)",diet:"Carnívoro",size:"~25 cm",w:"Materpiscis attenboroughi",
+  d:"Un placodermo fosilizado con un embrión dentro: es la prueba más antigua de un animal que daba a luz crías vivas. Su nombre homenajea a David Attenborough."},
+ // Silúrico
+ {id:"eurypterus",n:"Eurypterus",s:"Eurypterus remipes",p:"silurico",pl:"NA",ll:[-76.0,43.0],g:"invertebrado",when:"hace ~432 – 418 Ma",where:"Estado de Nueva York (EE. UU.)",diet:"Carnívoro",size:"~13 – 20 cm",w:"Eurypterus",
+  d:"El escorpión marino más común en los museos y el fósil oficial del estado de Nueva York. Nadaba con dos patas en forma de remo."},
+ {id:"pterygotus",n:"Pterygotus",s:"Pterygotus",p:"silurico",pl:"EU",ll:[-3.5,55.6],g:"invertebrado",when:"hace ~428 – 372 Ma",where:"Escocia; también otros continentes",diet:"Carnívoro",size:"hasta ~1,6 m",w:"Pterygotus",
+  d:"Un escorpión marino gigante con grandes pinzas dentadas. Era uno de los depredadores más grandes de los mares de su época."},
+ {id:"cooksonia",n:"Cooksonia",s:"Cooksonia",p:"silurico",pl:"EU",ll:[-3.5,52.0],g:"planta",when:"hace ~433 – 393 Ma",where:"Gales (Reino Unido)",diet:"—",size:"unos pocos cm",w:"Cooksonia",
+  d:"Una de las primeras plantas con vasos para transportar agua. Eran tallitos que se dividían en dos y terminaban en esporas, sin hojas ni raíces."},
+ {id:"pneumodesmus",n:"Pneumodesmus",s:"Pneumodesmus newmani",p:"silurico",pl:"EU",ll:[-2.2,56.96],g:"invertebrado",when:"hace ~425 – 414 Ma (fecha discutida)",where:"Stonehaven (Escocia)",diet:"Herbívoro",size:"~1 cm",w:"Pneumodesmus",
+  d:"Un milpiés diminuto y uno de los animales terrestres más antiguos que se conocen. Tenía orificios para respirar aire, así que ya vivía fuera del agua."},
+ {id:"halysites",n:"Halysites",s:"Halysites",p:"silurico",pl:"EU",ll:[18.5,57.5],g:"invertebrado",when:"hace ~460 – 420 Ma",where:"Isla de Gotland (Suecia)",diet:"Filtrador",size:"colonias de decenas de cm",w:"Halysites",
+  d:"Un «coral cadena», que formaba colonias con tubitos unidos como eslabones. Construyó arrecifes en mares tropicales poco profundos."},
+ {id:"guiyu",n:"Guiyu",s:"Guiyu oneiros",p:"silurico",pl:"EU",ll:[103.8,25.4],g:"pez",when:"hace ~423 Ma",where:"Yunnan (China)",diet:"Carnívoro",size:"~33 cm",w:"Guiyu oneiros",
+  d:"El pez óseo completo más antiguo que se conoce. Mezcla rasgos de los dos grandes grupos de peces óseos: los de aletas con radios y los de aletas carnosas."},
+ {id:"entelognathus",n:"Entelognathus",s:"Entelognathus primordialis",p:"silurico",pl:"EU",ll:[104.1,25.7],g:"pez",when:"hace ~423 Ma",where:"Yunnan (China)",diet:"Carnívoro",size:"~20 cm",w:"Entelognathus",
+  d:"Un placodermo acorazado con una mandíbula parecida a la de los peces modernos. Sugiere que nuestros huesos de la cara vienen de esos peces antiguos."},
+ {id:"baragwanathia",n:"Baragwanathia",s:"Baragwanathia longifolia",p:"silurico",pl:"AU",ll:[145.5,-37.5],g:"planta",when:"hace ~425 Ma",where:"Victoria (Australia)",diet:"—",size:"tallos de ~1 – 2 cm de ancho",w:"Baragwanathia",
+  d:"Un licopodio primitivo, de los más antiguos con hojas verdaderas. Era sorprendentemente complejo para una planta tan temprana."},
+ // Ordovícico
+ {id:"endoceras",n:"Endoceras",s:"Endoceras giganteum",p:"ordovicico",pl:"NA",ll:[-75.5,43.0],g:"invertebrado",when:"hace ~470 – 440 Ma",where:"Estado de Nueva York (EE. UU.)",diet:"Carnívoro",size:"concha de ~3,5 m conocida",w:"Endoceras",
+  d:"Un nautiloide, pariente de los pulpos y calamares con una concha recta y larga. Fue uno de los animales más grandes de su época; las estimaciones de más de 5 m son dudosas."},
+ {id:"isotelus",n:"Isotelus rex",s:"Isotelus rex",p:"ordovicico",pl:"NA",ll:[-97.0,58.7],g:"invertebrado",when:"hace ~445 Ma",where:"Manitoba (Canadá)",diet:"Carnívoro o carroñero",size:"~72 cm",w:"Isotelus",
+  d:"El trilobite completo más grande que se conoce, del tamaño de una bandeja. Los trilobites fueron artrópodos marinos que dominaron el Paleozoico."},
+ {id:"megalograptus",n:"Megalograptus",s:"Megalograptus ohioensis",p:"ordovicico",pl:"NA",ll:[-84.5,39.1],g:"invertebrado",when:"hace ~450 Ma",where:"Ohio (EE. UU.)",diet:"Carnívoro",size:"hasta ~1,2 m",w:"Megalograptus",
+  d:"Uno de los primeros escorpiones marinos grandes, con patas delanteras cubiertas de espinas para atrapar presas."},
+ {id:"sacabambaspis",n:"Sacabambaspis",s:"Sacabambaspis janvieri",p:"ordovicico",pl:"SA",ll:[-66.0,-17.5],g:"pez",when:"hace ~470 Ma",where:"Sacabamba (Bolivia)",diet:"Filtrador",size:"~25 cm",w:"Sacabambaspis",
+  d:"Un pez sin mandíbula, con los ojos al frente de la cabeza y la boca siempre abierta. Es uno de los vertebrados más antiguos y hoy es famoso en internet por su cara."},
+ {id:"arandaspis",n:"Arandaspis",s:"Arandaspis prionotolepis",p:"ordovicico",pl:"AU",ll:[133.0,-24.0],g:"pez",when:"hace ~480 – 470 Ma",where:"Territorio del Norte (Australia)",diet:"Detritívoro",size:"~15 cm",w:"Arandaspis",
+  d:"Uno de los vertebrados más antiguos con un esqueleto completo conocido. No tenía mandíbula ni aletas pares: nadaba moviendo la cola."},
+ {id:"promissum",n:"Promissum",s:"Promissum pulchrum",p:"ordovicico",pl:"AF",ll:[19.3,-32.3],g:"pez",when:"hace ~445 Ma",where:"Soom Shale (Sudáfrica)",diet:"Carnívoro",size:"~40 cm",w:"Promissum pulchrum",
+  d:"Un conodonte, animal con forma de anguila. Durante más de un siglo se conocieron solo sus dientes microscópicos, hasta que aparecieron cuerpos completos."},
+ {id:"asaphus",n:"Asaphus kowalewskii",s:"Asaphus kowalewskii",p:"ordovicico",pl:"EU",ll:[30.3,59.9],g:"invertebrado",when:"hace ~465 Ma",where:"San Petersburgo (Rusia)",diet:"Detritívoro",size:"~10 cm",w:"Asaphus kowalewskii",
+  d:"Un trilobite con los ojos en la punta de dos largos pedúnculos. Probablemente se enterraba en el fondo y dejaba solo los ojos afuera, como un periscopio."},
+ // Cámbrico
+ {id:"anomalocaris",n:"Anomalocaris",s:"Anomalocaris canadensis",p:"cambrico",pl:"NA",ll:[-116.47,51.43],g:"invertebrado",when:"hace ~508 Ma",where:"Esquisto de Burgess (Canadá)",diet:"Carnívoro",size:"~40 cm",w:"Anomalocaris",
+  d:"Uno de los primeros grandes depredadores. Tenía dos apéndices con espinas frente a la boca y grandes ojos compuestos. Al principio sus partes se describieron como tres animales distintos."},
+ {id:"hallucigenia",n:"Hallucigenia",s:"Hallucigenia sparsa",p:"cambrico",pl:"NA",ll:[-116.4,51.4],g:"invertebrado",when:"hace ~508 Ma",where:"Esquisto de Burgess (Canadá)",diet:"Probablemente filtrador",size:"~1 – 3 cm",w:"Hallucigenia",
+  d:"Un gusanito con patas y espinas tan raro que al principio se lo reconstruyó al revés y con la cabeza en la cola. Es pariente de los onicóforos actuales."},
+ {id:"opabinia",n:"Opabinia",s:"Opabinia regalis",p:"cambrico",pl:"NA",ll:[-116.55,51.5],g:"invertebrado",when:"hace ~508 Ma",where:"Esquisto de Burgess (Canadá)",diet:"Carnívoro",size:"~7 cm",w:"Opabinia",
+  d:"Tenía cinco ojos y una trompa larga terminada en una pinza. Cuando se presentó en un congreso en 1972, el público se rió porque parecía una broma."},
+ {id:"pikaia",n:"Pikaia",s:"Pikaia gracilens",p:"cambrico",pl:"NA",ll:[-116.35,51.35],g:"otro",when:"hace ~508 Ma",where:"Esquisto de Burgess (Canadá)",diet:"Filtrador",size:"~4 – 5 cm",w:"Pikaia",
+  d:"Un animalito parecido a una anguila con una notocorda, la varilla que precedió a la columna vertebral. Es un pariente lejano de todos los vertebrados, incluidos nosotros."},
+ {id:"haikouichthys",n:"Haikouichthys",s:"Haikouichthys ercaicunensis",p:"cambrico",pl:"EU",ll:[102.9,24.7],g:"pez",when:"hace ~518 Ma",where:"Chengjiang, Yunnan (China)",diet:"Filtrador",size:"~2,5 cm",w:"Haikouichthys",
+  d:"Uno de los peces más antiguos que se conocen, con cráneo y branquias. Era diminuto y no tenía mandíbula."},
+ {id:"paradoxides",n:"Paradoxides",s:"Paradoxides",p:"cambrico",pl:"EU",ll:[13.8,49.9],g:"invertebrado",when:"hace ~505 – 500 Ma",where:"Bohemia (República Checa); también Marruecos y Terranova",diet:"Carnívoro o carroñero",size:"hasta ~37 cm",w:"Paradoxides",
+  d:"Uno de los trilobites más grandes del Cámbrico, con largas espinas. En aquella época Bohemia estaba pegada al borde de Gondwana, no a Europa."},
+ {id:"archaeocyatha",n:"Arqueociatos",s:"Archaeocyatha",p:"cambrico",pl:"EU",ll:[128.0,62.0],g:"invertebrado",when:"hace ~525 – 515 Ma",where:"Siberia (Rusia); también Australia y la Antártida",diet:"Filtrador",size:"copas de pocos cm",w:"Archaeocyatha",
+  d:"Animales con forma de copa, parientes de las esponjas, que construyeron los primeros arrecifes hechos por animales. Desaparecieron casi por completo a mitad del Cámbrico."},
+ {id:"emubay",n:"Ojos de Emu Bay",s:"Anomalocaris (Emu Bay)",p:"cambrico",pl:"AU",ll:[137.0,-35.6],g:"invertebrado",when:"hace ~513 Ma",where:"Isla Canguro (Australia)",diet:"Carnívoro",size:"ojos de ~2 – 3 cm",w:"Emu Bay Shale",
+  d:"En Emu Bay se encontraron ojos fósiles de un pariente de Anomalocaris con más de 16.000 lentes cada uno, tantos como los de una libélula. Muestran que los primeros depredadores ya tenían una vista excelente."},
+ // Ediacárico
+ {id:"dickinsonia",n:"Dickinsonia",s:"Dickinsonia",p:"ediacarico",pl:"AU",ll:[138.6,-31.3],g:"otro",when:"hace ~558 – 550 Ma",where:"Cordillera de Flinders (Australia); también Rusia",diet:"Absorbía alimento del fondo",size:"de mm a ~1,4 m",w:"Dickinsonia",
+  d:"Un organismo plano y ovalado, como una alfombra acolchada. En 2018 se hallaron en sus fósiles restos de moléculas de colesterol, la prueba de que era un animal."},
+ {id:"spriggina",n:"Spriggina",s:"Spriggina floundersi",p:"ediacarico",pl:"AU",ll:[138.1,-30.6],g:"otro",when:"hace ~550 Ma",where:"Colinas de Ediacara (Australia)",diet:"Desconocida",size:"~3 – 5 cm",w:"Spriggina",
+  d:"Un organismo con una «cabeza» en forma de herradura y el cuerpo dividido en segmentos. Durante un tiempo se pensó que era un antepasado de los trilobites, pero sigue siendo un misterio."},
+ {id:"charnia",n:"Charnia",s:"Charnia masoni",p:"ediacarico",pl:"EU",ll:[-1.25,52.7],g:"otro",when:"hace ~562 Ma",where:"Bosque de Charnwood (Inglaterra)",diet:"Absorbía alimento del agua",size:"~20 cm – 2 m",w:"Charnia",
+  d:"Un organismo con forma de hoja de helecho que vivía fijo al fondo del mar. Lo encontraron dos adolescentes en 1957; fue el primer fósil de antes del Cámbrico que se reconoció como tal."},
+ {id:"kimberella",n:"Kimberella",s:"Kimberella quadrata",p:"ediacarico",pl:"EU",ll:[38.0,65.0],g:"otro",when:"hace ~555 Ma",where:"Costa del mar Blanco (Rusia); también Australia",diet:"Raspaba microbios del fondo",size:"~15 cm",w:"Kimberella",
+  d:"Un animal con forma de gota que dejaba marcas de raspado en el fondo marino. Muchos lo consideran un pariente temprano de los moluscos."},
+ {id:"fractofusus",n:"Fractofusus",s:"Fractofusus misrai",p:"ediacarico",pl:"NA",ll:[-53.2,46.6],g:"otro",when:"hace ~565 Ma",where:"Mistaken Point, Terranova (Canadá)",diet:"Absorbía alimento del agua",size:"~10 – 40 cm",w:"Mistaken Point",
+  d:"Un rangeomorfo, organismo con forma de huso hecho de ramitas que se repetían como un fractal. Mistaken Point conserva comunidades enteras en el fondo del mar profundo y es Patrimonio de la Humanidad."},
+ {id:"cloudina",n:"Cloudina",s:"Cloudina",p:"ediacarico",pl:"AF",ll:[16.5,-26.8],g:"invertebrado",when:"hace ~550 – 539 Ma",where:"Namibia; también Brasil, España y China",diet:"Filtrador",size:"tubos de ~1 – 15 cm",w:"Cloudina",
+  d:"Uno de los primeros animales con esqueleto mineral: vivía en tubos de conos apilados. Algunos tienen agujeros, quizás las primeras huellas de depredadores."},
+ {id:"corumbella",n:"Corumbella",s:"Corumbella werneri",p:"ediacarico",pl:"SA",ll:[-57.65,-19.0],g:"invertebrado",when:"hace ~545 Ma",where:"Corumbá, Mato Grosso do Sul (Brasil)",diet:"Probablemente filtrador",size:"tubos de pocos cm",w:"Corumbella",
+  d:"Un animal que vivía dentro de un tubo de cuatro caras, posible pariente temprano de las medusas. Es uno de los fósiles ediacáricos más conocidos de Sudamérica."},
  // Aves de hoy
  {"id": "b_hornero", "n": "Hornero", "s": "Furnarius rufus", "p": "aves", "pl": "SA", "ll": [-58.4, -34.6], "g": "ave", "when": "Preocupación menor", "where": "Argentina, Uruguay, Paraguay y sur de Brasil", "diet": "Insectívoro", "size": "~19 cm", "w": "Furnarius rufus", "d": "El ave nacional de la Argentina. Construye con barro y paja un nido en forma de horno, que puede pesar varios kilos y que la pareja levanta en pocas semanas.", "st": "LC"},
  {"id": "b_condor", "n": "Cóndor andino", "s": "Vultur gryphus", "p": "aves", "pl": "SA", "ll": [-69.5, -33.0], "g": "ave", "when": "Vulnerable", "where": "Cordillera de los Andes", "diet": "Carroñero", "size": "~3,2 m de envergadura", "w": "Vultur gryphus", "d": "Una de las aves voladoras más grandes del mundo. Casi no aletea: planea durante horas aprovechando las corrientes de aire caliente de la cordillera.", "st": "VU"},
@@ -624,7 +771,27 @@ const CGEO=COUNTRIES.map(c=>({type:"MultiPolygon",coordinates:c.c}));
 SPECIES.forEach(s=>{let i=CGEO.findIndex(g=>d3.geoContains(g,s.ll));
   if(i<0){let best=1e9;CGEO.forEach((g,j)=>{if(COUNTRIES[j].pl!==s.pl)return;g.coordinates.forEach(poly=>poly[0].forEach(p=>{const d=d3.geoDistance(p,s.ll);if(d<best){best=d;i=j}}))});if(best>0.06)i=-1}
   s.cc=i<0?null:i});
-const QP={};PERIODS.forEach(P=>{QP[P.k]={};ORDER.forEach(k=>QP[P.k][k]=plateQuat(k,P.pos[k]))});
+const GOND=["SA","AF","AN","AU","IN","MG"];
+const QP={};PERIODS.filter(P=>!P.lm).forEach(P=>{QP[P.k]={};ORDER.forEach(k=>QP[P.k][k]=plateQuat(k,P.pos[k]))});
+/* Antes del Triásico, Gondwana se mueve como un bloque: se toma su forma del Triásico y se la desplaza y gira */
+/* Puntos de referencia actuales (placa, lon, lat) que se ubican en cada época */
+const LANDMARK={mor:["AF",-8,30],safr:["AF",22,-34],nyc:["NA",-74,41],alaska:["NA",-150,64],norw:["EU",8,61],sib:["EU",105,62]};
+const nrm=v=>{const m=Math.hypot(...v);return v.map(x=>x/m)};
+function frame(a,b){const n=nrm(cross(a,b));return [a,n,cross(a,n)]}
+function quatFromMatrix(m){const t=m[0][0]+m[1][1]+m[2][2];let w,x,y,z;
+  if(t>0){const s=Math.sqrt(t+1)*2;w=s/4;x=(m[2][1]-m[1][2])/s;y=(m[0][2]-m[2][0])/s;z=(m[1][0]-m[0][1])/s}
+  else if(m[0][0]>m[1][1]&&m[0][0]>m[2][2]){const s=Math.sqrt(1+m[0][0]-m[1][1]-m[2][2])*2;w=(m[2][1]-m[1][2])/s;x=s/4;y=(m[0][1]+m[1][0])/s;z=(m[0][2]+m[2][0])/s}
+  else if(m[1][1]>m[2][2]){const s=Math.sqrt(1+m[1][1]-m[0][0]-m[2][2])*2;w=(m[0][2]-m[2][0])/s;x=(m[0][1]+m[1][0])/s;y=s/4;z=(m[1][2]+m[2][1])/s}
+  else{const s=Math.sqrt(1+m[2][2]-m[0][0]-m[1][1])*2;w=(m[1][0]-m[0][1])/s;x=(m[0][2]+m[2][0])/s;y=(m[1][2]+m[2][1])/s;z=s/4}
+  return nrm([w,x,y,z])}
+/* Rotación que lleva dos puntos de origen a dos destinos (el primero exacto, el segundo en dirección) */
+function alignQuat(a1,a2,b1,b2){const A=frame(a1,a2),B=frame(b1,b2);const m=[[0,0,0],[0,0,0],[0,0,0]];
+  for(let i=0;i<3;i++)for(let j=0;j<3;j++)for(let k=0;k<3;k++)m[i][j]+=B[k][i]*A[k][j];return quatFromMatrix(m)}
+PERIODS.filter(P=>P.lm).forEach(P=>{QP[P.k]={};
+  const src=(n,base)=>{const [pl,lo,la]=LANDMARK[n];const v=v3(lo,la);return base?qRot(QP.triasico[pl],v):v};
+  const qFor=(spec,base)=>alignQuat(src(spec[0][0],base),src(spec[1][0],base),v3(spec[0][1],spec[0][2]),v3(spec[1][1],spec[1][2]));
+  const qG=qFor(P.lm.G,true);
+  ORDER.forEach(k=>QP[P.k][k]=GOND.includes(k)?qMul(qG,QP.triasico[k]):qFor(P.lm[k],false))});
 
 /* ---------- Estado ---------- */
 const state={period:"cretacico",plate:null,species:null,country:null,ghost:false,countries:true};
@@ -865,7 +1032,7 @@ function updateCaption(){const p=P(state.period);document.getElementById("capAge
 
 function selectPeriod(k){
   if(k===state.period)return;
-  state.period=k;state.plate=null;state.species=null;stopSpin();if(!state.countries)state.country=null;
+  state.period=k;state.plate=null;state.species=null;stopSpin();svg.classed("barren",["ediacarico","cambrico","ordovicico"].includes(k));if(!state.countries)state.country=null;
   strata.querySelectorAll(".layer").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k));
   const ab=strata.querySelector(`.layer[data-k="${k}"]`);if(ab&&isMobile())ab.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
   updateCaption();renderPanel();drawGhost();animateTo(k);

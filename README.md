@@ -1,6 +1,6 @@
 # Especies del Mundo · Atlas Prehistórico
 
-Globo 3D interactivo para explorar dónde vivían las especies extintas, desde el Triásico hasta el Cuaternario, y las aves que viven hoy.
+Globo 3D interactivo para explorar dónde vivían los seres vivos extintos, desde los primeros animales del Ediacárico, pasando por el Paleozoico y el Mesozoico, hasta el Cuaternario, y las aves que viven hoy.
 
 - Elegí un período en la columna de estratos y los continentes se mueven a su posición aproximada de esa época.
 - Girá el globo arrastrándolo y acercalo con la rueda del mouse, con los botones o con dos dedos en el celular.
