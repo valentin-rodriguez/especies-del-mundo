@@ -148,6 +148,16 @@ body.sheet-open{padding-bottom:62vh}
 .pchip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .empty{color:var(--muted);font-size:.9rem}
 
+/* La columna de épocas queda fija y se desplaza con su propia barra */
+@media (min-width:721px){
+  .strata{position:sticky;top:16px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) var(--scroll-track)}
+  .strata::-webkit-scrollbar{width:10px}
+  .strata::-webkit-scrollbar-track{background:var(--scroll-track)}
+  .strata::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:5px;border:2px solid var(--scroll-track)}
+  .strata::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+  .era{position:sticky;top:0;z-index:1}
+}
 /* En pantallas anchas la lista queda fija al lado del globo y se desplaza con su propia barra */
 @media (min-width:1101px){
   .panel{position:sticky;top:16px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;
@@ -1034,8 +1044,11 @@ function selectPeriod(k){
   if(k===state.period)return;
   state.period=k;state.plate=null;state.species=null;stopSpin();svg.classed("barren",["ediacarico","cambrico","ordovicico"].includes(k));if(!state.countries)state.country=null;
   strata.querySelectorAll(".layer").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k));
-  const ab=strata.querySelector(`.layer[data-k="${k}"]`);if(ab&&isMobile())ab.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+  const ab=strata.querySelector(`.layer[data-k="${k}"]`);if(ab){if(isMobile())ab.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});else{const top=ab.offsetTop-strata.clientHeight/2+ab.offsetHeight/2;strata.scrollTo({top,behavior:"smooth"})}}
   updateCaption();renderPanel();drawGhost();animateTo(k);
+  /* girar el globo hacia donde está la mayor parte de la tierra en esa época */
+  const m=[0,0,0];ORDER.filter(p=>p!=="AN").forEach(p=>{const v=qRot(QP[k][p],v3(...CENTER[p]));m[0]+=v[0];m[1]+=v[1];m[2]+=v[2]});
+  if(Math.hypot(...m)>0.3&&k!=="aves"&&k!=="cuaternario")flyTo(toLL(m));
 }
 function selectCountry(i){stopSpin();
   if(i!==null&&i===state.country&&!state.species)i=null;
