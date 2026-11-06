@@ -8,7 +8,7 @@
 :root{
   --bg:#ECEFEC; --surface:#FBFCFA; --ink:#1C2321; --muted:#56635E; --line:#CFD7D3;
   --ocean:#BFD6DD; --ocean-grid:#A9C5CE; --land:#E6DAC0; --land-edge:#9C8D6A; --land-hover:#DCCBA4; --ghost:#3E6C7A;
-  --accent:#2C6B5E; --accent-ink:#FFFFFF; --country-sel:rgba(44,107,94,.28);
+  --accent:#2C6B5E; --accent-ink:#FFFFFF; --country-sel:rgba(44,107,94,.28); --scroll-track:#E3E8E5; --scroll-thumb:#9FB0A9;
   --g-dino:#B8461B; --g-reptil:#4F7A28; --g-marino:#1C64A0; --g-mamifero:#7B4A9E; --g-ave:#A77A00; --g-humano:#9B2F55; --g-anfibio:#0E8378;
   --f-display:"Zilla Slab", "Rockwell", "Roboto Slab", Georgia, serif;
   --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
@@ -17,13 +17,13 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111615; --surface:#182020; --ink:#E5EBE8; --muted:#9AA8A3; --line:#2A3533;
   --ocean:#14303A; --ocean-grid:#1D3E4A; --land:#5A523E; --land-edge:#91845F; --land-hover:#6E6449; --ghost:#8FC3D2;
-  --accent:#6FC1AE; --accent-ink:#0E1A17; --country-sel:rgba(111,193,174,.30);
+  --accent:#6FC1AE; --accent-ink:#0E1A17; --country-sel:rgba(111,193,174,.30); --scroll-track:#1F2928; --scroll-thumb:#4A5A56;
   --g-dino:#F0844F; --g-reptil:#9BCB5E; --g-marino:#62AEEA; --g-mamifero:#C29BE6; --g-ave:#F0C64A; --g-humano:#EE7FA6; --g-anfibio:#5FD0C2;
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111615; --surface:#182020; --ink:#E5EBE8; --muted:#9AA8A3; --line:#2A3533;
   --ocean:#14303A; --ocean-grid:#1D3E4A; --land:#5A523E; --land-edge:#91845F; --land-hover:#6E6449; --ghost:#8FC3D2;
-  --accent:#6FC1AE; --accent-ink:#0E1A17; --country-sel:rgba(111,193,174,.30);
+  --accent:#6FC1AE; --accent-ink:#0E1A17; --country-sel:rgba(111,193,174,.30); --scroll-track:#1F2928; --scroll-thumb:#4A5A56;
   --g-dino:#F0844F; --g-reptil:#9BCB5E; --g-marino:#62AEEA; --g-mamifero:#C29BE6; --g-ave:#F0C64A; --g-humano:#EE7FA6; --g-anfibio:#5FD0C2;
   color-scheme:dark}
 *{box-sizing:border-box}
@@ -147,6 +147,15 @@ body.sheet-open{padding-bottom:62vh}
 .pchip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .empty{color:var(--muted);font-size:.9rem}
 
+/* En pantallas anchas la lista queda fija al lado del globo y se desplaza con su propia barra */
+@media (min-width:1101px){
+  .panel{position:sticky;top:16px;max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    scrollbar-width:auto;scrollbar-color:var(--scroll-thumb) var(--scroll-track);scrollbar-gutter:stable}
+  .panel::-webkit-scrollbar{width:12px}
+  .panel::-webkit-scrollbar-track{background:var(--scroll-track);border-radius:0 6px 6px 0}
+  .panel::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:6px;border:3px solid var(--scroll-track)}
+  .panel::-webkit-scrollbar-thumb:hover{background:var(--muted)}
+}
 @media (max-width:1100px){
   .app{grid-template-columns:130px minmax(0,1fr);grid-template-areas:"head head" "strata map" "panel panel"}
 }
@@ -810,6 +819,7 @@ function wireDetail(root,s){
   });
 }
 function renderPanel(){
+  panel.scrollTop=0;
   const per=P(state.period);
   const chip=`<span class="chip" style="--pc:${per.pc};--pt:${per.pt}">${per.n} · ${per.ma}</span>`;
   const mob=isMobile();
